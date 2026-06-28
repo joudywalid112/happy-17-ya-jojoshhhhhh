@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <title>The Universe of Jojosh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,500&family=Inter:wght@200;300;400;500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #050505;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            color: #F5F5F5;
+        }
+
+        /* 1. Orientation Screen */
+        #orientation-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 1.5s ease; /* Made fade transition smoother */
+        }
+
+        .phone-icon-wrapper {
+            width: 80px;
+            height: 140px;
+            border: 4px solid #D8C7A1;
+            border-radius: 12px;
+            position: relative;
+            animation: rotatePhone 4s infinite ease-in-out;
+            margin-bottom: 30px;
+        }
+        .phone-icon-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 8px; left: calc(50% - 5px);
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #D8C7A1;
+        }
+
+        @keyframes rotatePhone {
+            0%, 100% { transform: rotate(0deg); }
+            40%, 60% { transform: rotate(-90deg); }
+        }
+
+        .orientation-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            color: #D8C7A1;
+            line-height: 1.6;
+        }
+        .orientation-subtext {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* Cinematic Stages Setup */
+        .cinematic-stage {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            z-index: 10;
+        }
+
+        /* Typography & Components */
+        .cinema-text-container {
+            text-align: center;
+            max-width: 85%;
+            padding: 10px;
+        }
+
+        .elegant-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: #F5F5F5;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .elegant-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            color: #D8C7A1;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal-active {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .elegant-btn {
+            background: transparent;
+            border: 1px solid rgba(216, 199, 161, 0.4);
+            color: #D8C7A1;
+            padding: 12px 35px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-top: 30px;
+            opacity: 0;
+            transition: all 0.5s ease, opacity 1.5s ease;
+        }
+        .elegant-btn:active {
+            background: rgba(216, 199, 161, 0.1);
+            border-color: #D8C7A1;
+        }
+
+        /* Canvas Backdrop */
+        .fx-overlay-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Memory Wall Stage Specifics */
+        #stage-memory-wall {
+            background: #050505;
+        }
+
+        .ambient-glow-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top, rgba(216, 199, 161, 0.05) 0%, rgba(0,0,0,0) 80%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .fairy-lights-header {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 45px;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 2%;
+            z-index: 12;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+
+        .fairy-bulb {
+            width: 5px; height: 8px;
+            background: rgba(255, 230, 180, 0.95);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 200, 130, 0.8);
+            animation: naturalFlicker 3s infinite alternate ease-in-out;
+        }
+        @keyframes naturalFlicker {
+            0%, 100% { opacity: 0.95; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.93); }
+        }
+
+        .strings-container {
+            position: absolute;
+            top: 5%; left: -2%; width: 104%; height: 350px;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .wire-svg {
+            position: absolute;
+            width: 100%; height: 90px; left: 0;
+            transition: opacity 2s ease;
+        }
+        #wire-1 { top: 0px; }
+        #wire-2 { top: 95px; }
+        #wire-3 { top: 190px; }
+
+        #wall-nodes-mount-deck {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: 5;
+        }
+
+        /* Polaroid Node Architecture */
+        .memory-polaroid-node {
+            position: absolute;
+            background: #FAFAFA;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            border-radius: 2px;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            width: 250px;
+            padding: 12px 12px 30px 12px;
+            left: calc(50% - 125px);
+            top: calc(45% - 140px);
+            z-index: 100; 
+            transform: scale(0.9) translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .memory-polaroid-node::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .memory-polaroid-node.enter-center {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .memory-polaroid-node.masterpiece-special {
+            box-shadow: 0 0 50px rgba(216, 199, 161, 0.6), 0 35px 70px rgba(0,0,0,0.9) !important;
+            border: 1px solid rgba(216, 199, 161, 0.4);
+            transform: scale(1.08) translateY(-15px) !important;
+            z-index: 9999 !important;
+        }
+
+        .photo-canvas-inner {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #111;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .photo-canvas-inner img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .wooden-clothespin {
+            width: 8px; height: 22px;
+            background: #bfa17a;
+            position: absolute;
+            top: -11px; left: calc(50% - 4px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+            z-index: 110;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: bottom center;
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hanging/Floating Animations */
+        @keyframes travelUpToWall {
+            0% {
+                width: 250px; padding: 12px 12px 30px 12px;
+                left: calc(50% - 125px); top: calc(45% - 140px);
+                transform: scale(1) rotate(0deg); z-index: 100;
+            }
+            100% {
+                width: 115px; padding: 5px 5px 15px 5px;
+                left: var(--wall-left); top: var(--wall-top);
+                transform: scale(1) rotate(var(--wall-tilt));
+                z-index: 25; 
+            }
+        }
+        .memory-polaroid-node.fly-to-string {
+            animation: travelUpToWall 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        }
+
+        @keyframes permanentIdleBreeze {
+            0%, 100% { transform: scale(1) rotate(var(--wall-tilt)) translateY(0); }
+            50% { transform: scale(1) rotate(calc(var(--wall-tilt) + 1.5deg)) translateY(-2px); }
+        }
+        .memory-polaroid-node.breeze-idle {
+            animation: permanentIdleBreeze 4s infinite alternate ease-in-out !important;
+            width: 115px !important; padding: 5px 5px 15px 5px !important;
+            left: var(--wall-left) !important; top: var(--wall-top) !important;
+            opacity: 1 !important;
+        }
+
+        @keyframes ascendFloatAway {
+            0% { transform: scale(1) rotate(var(--wall-tilt)) translateY(0); opacity: 1; }
+            100% { transform: scale(0.4) rotate(calc(var(--wall-tilt) * 2)) translateY(-150vh); opacity: 0; }
+        }
+        .memory-polaroid-node.ascend-away {
+            animation: ascendFloatAway 5s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        }
+
+        /* Fixed Horizontal Subtitle Panel */
+        .dynamic-captions-hud {
+            position: fixed;
+            bottom: 3%; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 950px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 200;
+            padding: 5px 20px;
+            transition: opacity 0.5s ease;
+            background: linear-gradient(to top, rgba(5,5,5,0.95) 75%, rgba(5,5,5,0));
+        }
+
+        .caption-row-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.45rem;
+            color: #D8C7A1;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.4, 1);
+            margin-bottom: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            line-height: 1.3;
+            width: 100%;
+        }
+        .caption-row-line.active-line {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Final Scrollable Letter Deck */
+        #stage-final-letter {
+            background-color: #F5F5F5;
+            align-items: flex-start;
+            padding: 80px 40px 140px 40px; 
+            overflow-y: auto;
+            display: none;
+            opacity: 0;
+        }
+        .sheet-scroll-area {
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .sheet-letter-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            line-height: 2.2;
+            color: #050505;
+            opacity: 0;
+            margin-bottom: 35px;
+            transition: opacity 2s cubic-bezier(0.25, 1, 0.4, 1);
+        }
+        .sheet-letter-line.visible {
+            opacity: 1;
+        }
+
+        .final-signature-line {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: #888888;
+            letter-spacing: 1px;
+            margin-top: 60px;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+
+        /* Tiny Secret Button */
+        .tiny-secret-btn {
+            background: transparent;
+            border: none;
+            color: #b0b0b0;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 50px;
+            opacity: 0;
+            display: inline-block;
+            transition: opacity 2s ease, color 0.3s ease;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+        .tiny-secret-btn:active {
+            color: #000000;
+        }
+
+        /* Secret Modal Popup */
+        .modal-overlay-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+        .modal-overlay-backdrop.modal-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .minimal-popup-card {
+            background: #0d0d0d;
+            border: 1px solid rgba(216, 199, 161, 0.15);
+            padding: 40px 50px;
+            max-width: 500px;
+            width: 85%;
+            text-align: center;
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            transform: scale(0.95);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+        }
+        .modal-overlay-backdrop.modal-open .minimal-popup-card {
+            transform: scale(1);
+        }
+
+        .popup-msg-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: #D8C7A1;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        .popup-close-trigger {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="orientation-overlay">
+        <div class="phone-icon-wrapper"></div>
+        <div class="orientation-text">This little universe was made to be explored sideways.</div>
+        <div class="orientation-subtext">Rotate your phone ya jojoshhhhhh plsss</div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-opening">
+        <div class="cinema-text-container">
+            <h1 class="elegant-title" id="op-t1">Before you continue...</h1>
+            <p class="elegant-sub" id="op-t2">there is something I've been wanting to show you for a very long time.</p>
+            <button class="elegant-btn" id="btn-enter-universe">Enter</button>
+        </div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-intro">
+        <div class="cinema-text-container">
+            <h1 class="elegant-title" id="intro-t1">This website contains 730 days of friendship.</h1>
+            <p class="elegant-sub" id="intro-t2" style="margin-top:15px;">Some moments were forgotten. <br>I saved them anyway.</p>
+        </div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-cosmic">
+        <canvas class="fx-overlay-canvas" id="cosmic-canvas"></canvas>
+        <div class="cinema-text-container" style="z-index: 5;">
+            <p class="elegant-sub" id="cosmic-text-hud"></p>
+        </div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-reveal">
+        <div class="cinema-text-container">
+            <h1 class="elegant-title" id="reveal-main-title" style="font-size: 3rem; tracking: 1px;">I found you.</h1>
+        </div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-memory-wall">
+        <div class="ambient-glow-overlay"></div>
+        <div class="fairy-lights-header" id="lights-track-bar"></div>
+        <canvas class="fx-overlay-canvas" id="wall-fx-canvas"></canvas>
+
+        <div class="strings-container">
+            <svg class="wire-svg" id="wire-1"><path d="" fill="none" stroke="rgba(216, 199, 161, 0.2)" stroke-width="1.2" id="path-wire-1"/></svg>
+            <svg class="wire-svg" id="wire-2"><path d="" fill="none" stroke="rgba(216, 199, 161, 0.2)" stroke-width="1.2" id="path-wire-2"/></svg>
+            <svg class="wire-svg" id="wire-3"><path d="" fill="none" stroke="rgba(216, 199, 161, 0.2)" stroke-width="1.2" id="path-wire-3"/></svg>
+        </div>
+
+        <div id="wall-nodes-mount-deck"></div>
+        <div class="dynamic-captions-hud" id="captions-target-hud"></div>
+    </div>
+
+    <div class="cinematic-stage" id="stage-final-letter">
+        <div class="sheet-scroll-area" id="letter-lines-container"></div>
+    </div>
+
+    <div class="modal-overlay-backdrop" id="secret-modal-backdrop">
+        <div class="minimal-popup-card">
+            <button class="popup-close-trigger" id="close-modal-btn">×</button>
+            <p class="popup-msg-line">If I had to choose my favorite memory...</p>
+            <p class="popup-msg-line">I'd wait.</p>
+            <p class="popup-msg-line">Because I know we haven't lived it yet.</p>
+            <div style="height: 20px;"></div>
+            <p class="popup-msg-line" style="color: #F5F5F5; font-size: 1.55rem;">See you in the next memory. 🤍</p>
+        </div>
+    </div>
+
+    <script>
+        const sleepTimer = ms => new Promise(res => setTimeout(res, ms));
+
+        // 17 Structured Memories Dataset Map
+        const adaptiveWallMemoryCollection = [
+            { img: "file:///c:/Users/PC/Downloads/1.jpeg", captions: ["Probably the most eventful day in human history 😭.", "W Rabena y5alelna Fathallah, the network, your keys...", "w Ahmed Tee too of course 😘"], tilt: -5, stringIndex: 1, xRatio: 0.12 },
+            { img: "file:///c:/Users/PC/Downloads/2.jpeg", captions: ["Definitely one of the best days of our lives.", "You can literally tell from my face 😭.", "I was honestly a little sad because I loved our school memories so much...", "Bas eh ya3ny, we'll make memories everywhere we go 🥵❤️"], tilt: 4, stringIndex: 1, xRatio: 0.28 },
+            { img: "file:///c:/Users/PC/Downloads/3.jpeg", captions: ["2olely el deffrance between me w el ward hhh."], tilt: -3, stringIndex: 1, xRatio: 0.44 },
+            { img: "file:///c:/Users/PC/Downloads/4.jpeg", captions: ["I seriously can't explain how much I love this picture.", "Whenever I think about school...", "This is the photo that pops into my head first."], tilt: 5, stringIndex: 1, xRatio: 0.60 },
+            { img: "file:///c:/Users/PC/Downloads/5.jpeg", captions: ["SMASHHHHHHHHHHHHHHHHHHHH."], tilt: -4, stringIndex: 1, xRatio: 0.76 },
+            { img: "file:///c:/Users/PC/Downloads/6.jpeg", captions: ["The best nap I've ever taken in my entire life 😭.", "I slept better than I do in my own bed.", "Rabena ysam7 Mr. English...", "w y5alelna ktef el Jojosh 😘"], tilt: 6, stringIndex: 1, xRatio: 0.90 },
+            { img: "file:///c:/Users/PC/Downloads/7.jpeg", captions: ["Do you remember what song I was singing to you that day?"], tilt: -5, stringIndex: 2, xRatio: 0.15 },
+            { img: "file:///c:/Users/PC/Downloads/8.jpeg", captions: ["10/10 day.", "10/10 ice cream.", "10/10 walk.", "W atra bala7 el sham...", "w enti fahma ba2a 🥵"], tilt: 3, stringIndex: 2, xRatio: 0.32 },
+            { img: "file:///c:/Users/PC/Downloads/9.jpeg", captions: ["Hamoott w a3raf...", "What were you telling me hereee? 😭"], tilt: -6, stringIndex: 2, xRatio: 0.50 },
+            { img: "file:///c:/Users/PC/Downloads/10.jpeg", captions: ["A perfect day...", "Except for the koshary of course. 💀"], tilt: 4, stringIndex: 2, xRatio: 0.68 },
+            { img: "file:///c:/Users/PC/Downloads/11.jpeg", captions: ["Second year - first semester...", "Ya bbooooyyyy"], tilt: -3, stringIndex: 2, xRatio: 0.85 },
+            { img: "file:///c:/Users/PC/Downloads/12.jpeg", captions: ["Probably the most iconic photo in human history."], tilt: 5, stringIndex: 3, xRatio: 0.20 },
+            { img: "file:///c:/Users/PC/Downloads/13.jpeg", captions: ["This picture smells like Cinnabon...", "and \"and that i got engaged.\" hhhhh"], tilt: -4, stringIndex: 3, xRatio: 0.40 },
+            { img: "file:///c:/Users/PC/Downloads/14.jpeg", captions: ["The official First Secondary photo 😭📸"], tilt: 4, stringIndex: 3, xRatio: 0.60 },
+            { img: "file:///c:/Users/PC/Downloads/15.jpeg", captions: ["The amount of love you gave me during first year honestly can't be described...", "Bas wallahy msh 3arfa ezay madetkesh etneen a2lam 3ala wishik kedaa 😭"], tilt: -5, stringIndex: 3, xRatio: 0.80 },
+            { img: "file:///c:/Users/PC/Downloads/16.jpeg", captions: ["I barely remember anything about that day...", "Buttttt...", "We still managed to take one of the most iconic pictures everrr"], tilt: 3, stringIndex: 3, xRatio: 0.92 },
+            { img: "file:///c:/Users/PC/Downloads/17.jpeg", captions: [
+                    "JOJOOOOOOSH...", "EL KEBEERAAAA OOWWWWWWYYYYY ❤️😭", "I don't know why...", "We've only known each other for two years,",
+                    "but somehow it feels like I grew up with you.", "Like I've watched every version of you become the person you are today.",
+                    "And honestly...", "I've never looked at you the same way I look at everyone else.",
+                    "You'll always be someone different to me.", "Someone special.", "Someone I'll always be grateful for.",
+                    "I really hope we stay together through every stage of life.", "I hope one day I'll invite you to my wedding...",
+                    "...and maybe you'll find your future husband there too 😭😂", "Kol sana w enti tayeba ya Jojosh ya kebeera owwwyyyy ❤️",
+                    "Happy Birthday.", "Thank you for making these two years feel like so much more."
+                ], tilt: 0, stringIndex: 0, xRatio: 0.5, isMasterpiece: true }
+        ];
+
+        // Final Letter Sequence Dataset Map
+        const documentFinalLetterBank = [
+            "One day...", "We will probably stop talking every day...", "Life will get busy.", "We'll change.", "We'll grow up.",
+            "We'll have different schedules.", "Different responsibilities.", "Different versions of ourselves.",
+            "And maybe one day we'll look back at these years and realize how quickly they passed.",
+            "But there is one thing I need you to know.", "No matter where life takes us.", "No matter how much time passes.", "No matter how different things become.",
+            "There will always be a version of me,", "somewhere in time,", "sitting in her room,", "laughing at your messages,",
+            "waiting to tell you about her day,", "feeling grateful that you exist.", "There will always be a version of me",
+            "who is unbelievably thankful", "that out of all the people in this world,", "she got to know you.",
+            "And if I could go back and live all of these years again,", "knowing everything that would happen,",
+            "I would still choose every conversation.", "Every memory.", "Every stupid joke.", "Every late-night call.", "Every moment.",
+            "Because getting to know you", "has been one of the best things that ever happened to me.",
+            "Happy Birthday.",
+            "And thank you...", "for being my comfort place in a world that didn't always feel comfortable."
+        ];
+
+        // Orientation Manager Engine
+        async function verifyOrientationMetric() {
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const overlay = document.getElementById('orientation-overlay');
+            if (isLandscape) {
+                if (overlay.style.opacity !== '0') {
+                    // Adjustment: Added a 2.5-second cinematic pause once landscape is detected so she can finish reading comfortably
+                    await sleepTimer(2500); 
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.style.display = 'none'; }, 1500);
+                    initializeGlobalSystems();
+                }
+            } else {
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
+            }
+        }
+
+        window.addEventListener('resize', verifyOrientationMetric);
+        window.addEventListener('load', verifyOrientationMetric);
+
+        let systemsStarted = false;
+        function initializeGlobalSystems() {
+            if (systemsStarted) return;
+            systemsStarted = true;
+            runCinematicPipeline();
+        }
+
+        // Global Orchestrator
+        async function runCinematicPipeline() {
+            // Stage 1: Opening Sequence Setup
+            const stageOpening = document.getElementById('stage-opening');
+            stageOpening.style.display = 'flex';
+            stageOpening.getBoundingClientRect();
+            stageOpening.style.opacity = '1';
+
+            await sleepTimer(2500); 
+            document.getElementById('op-t1').classList.add('reveal-active');
+            await sleepTimer(3500); 
+            document.getElementById('op-t2').classList.add('reveal-active');
+            await sleepTimer(3000); 
+            const enterBtn = document.getElementById('btn-enter-universe');
+            enterBtn.style.opacity = '1';
+
+            enterBtn.addEventListener('click', () => {
+                transitionStages(stageOpening, proceedToIntroDeck);
+            });
+        }
+
+        async function transitionStages(currentStage, nextStageCallback) {
+            currentStage.style.opacity = '0';
+            await sleepTimer(1500);
+            currentStage.style.display = 'none';
+            nextStageCallback();
+        }
+
+        // Stage 2: Introduction Deck Setup
+        async function proceedToIntroDeck() {
+            const stageIntro = document.getElementById('stage-intro');
+            stageIntro.style.display = 'flex';
+            stageIntro.getBoundingClientRect();
+            stageIntro.style.opacity = '1';
+
+            await sleepTimer(2500); 
+            document.getElementById('intro-t1').classList.add('reveal-active');
+            await sleepTimer(4500); 
+            document.getElementById('intro-t2').classList.add('reveal-active');
+            await sleepTimer(5000); 
+
+            transitionStages(stageIntro, proceedToCosmicSkies);
+        }
+
+        // Stage 3: Stars Sequence Engine Setup
+        let cosmicCanvas, cosmicCtx, starsArray = [], cosmicMode = 'GROWING';
+        async function proceedToCosmicSkies() {
+            const stageCosmic = document.getElementById('stage-cosmic');
+            stageCosmic.style.display = 'flex';
+            stageCosmic.getBoundingClientRect();
+            stageCosmic.style.opacity = '1';
+
+            cosmicCanvas = document.getElementById('cosmic-canvas');
+            cosmicCtx = cosmicCanvas.getContext('2d');
+            cosmicCanvas.width = window.innerWidth;
+            cosmicCanvas.height = window.innerHeight;
+
+            for(let i=0; i<150; i++) {
+                starsArray.push({
+                    x: Math.random() * cosmicCanvas.width,
+                    y: Math.random() * cosmicCanvas.height,
+                    maxRadius: Math.random() * 1.5 + 0.5,
+                    currentRadius: 0,
+                    growSpeed: Math.random() * 0.01 + 0.005,
+                    twinkleSpeed: Math.random() * 0.04 + 0.01,
+                    twinklePhase: Math.random() * Math.PI,
+                    isMasterStar: (i === 75) 
+                });
+            }
+
+            requestAnimationFrame(renderCosmicLoop);
+
+            const textHUD = document.getElementById('cosmic-text-hud');
+            const lines = [
+                "Sometimes... <br>people remind you of songs. <br>Some remind you of places.",
+                "You... <br>always reminded me of the stars.",
+                "I don't really know why. <br>Maybe because... <br>they both make everything feel a little quieter.",
+                "No matter how dark everything gets... <br>they're always there.",
+                "Whenever I look at the night sky... <br>I somehow end up thinking about you."
+            ];
+
+            await sleepTimer(4000); 
+
+            for(let line of lines) {
+                textHUD.innerHTML = line;
+                textHUD.classList.add('reveal-active');
+                await sleepTimer(6000); 
+                textHUD.classList.remove('reveal-active');
+                await sleepTimer(2000); 
+            }
+
+            cosmicMode = 'ZOOMING';
+            await sleepTimer(4000);
+            transitionStages(stageCosmic, proceedToMainReveal);
+        }
+
+        function renderCosmicLoop() {
+            if(!cosmicCtx) return;
+            cosmicCtx.clearRect(0, 0, cosmicCanvas.width, cosmicCanvas.height);
+
+            starsArray.forEach(s => {
+                if(cosmicMode === 'GROWING') {
+                    if(s.currentRadius < s.maxRadius) s.currentRadius += s.growSpeed;
+                } else if(cosmicMode === 'ZOOMING') {
+                    if(s.isMasterStar) {
+                        s.currentRadius += 0.9; 
+                    } else {
+                        let dx = s.x - cosmicCanvas.width/2;
+                        let dy = s.y - cosmicCanvas.height/2;
+                        s.x += dx * 0.05;
+                        s.y += dy * 0.05;
+                    }
+                }
+
+                let alpha = 0.6 + Math.sin(Date.now() * s.twinkleSpeed + s.twinklePhase) * 0.4;
+                if(s.isMasterStar && cosmicMode === 'ZOOMING') alpha = 1;
+
+                cosmicCtx.beginPath();
+                cosmicCtx.arc(s.x, s.y, Math.max(0.1, s.currentRadius), 0, Math.PI*2);
+                cosmicCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, alpha))})`;
+                cosmicCtx.fill();
+            });
+
+            requestAnimationFrame(renderCosmicLoop);
+        }
+
+        // Stage 4: Main Reveal Title
+        async function proceedToMainReveal() {
+            const stageReveal = document.getElementById('stage-reveal');
+            stageReveal.style.display = 'flex';
+            stageReveal.getBoundingClientRect();
+            stageReveal.style.opacity = '1';
+
+            await sleepTimer(2000);
+            document.getElementById('reveal-main-title').classList.add('reveal-active');
+            await sleepTimer(5000); 
+            transitionStages(stageReveal, proceedToMemoryWallDeck);
+        }
+
+        // Stage 5: Memory Hanging Wall Timeline Engine
+        let wallCanvas, wallCtx, wallParticles = [], wallFXMode = 'DUST';
+        async function proceedToMemoryWallDeck() {
+            const stageWall = document.getElementById('stage-memory-wall');
+            stageWall.style.display = 'flex';
+            stageWall.getBoundingClientRect();
+            stageWall.style.opacity = '1';
+
+            const lightsContainer = document.getElementById('lights-track-bar');
+            const bulbCount = Math.floor(window.innerWidth / 40);
+            for(let i=0; i<bulbCount; i++) {
+                const bulb = document.createElement('div');
+                bulb.className = 'fairy-bulb';
+                lightsContainer.appendChild(bulb);
+            }
+
+            calculateWireGeometry();
+            initializeWallFXParticleEngine();
+
+            const hud = document.getElementById('captions-target-hud');
+            hud.innerHTML = `<p class="caption-row-line active-line" style="font-size:2.2rem; color:#F5F5F5;">17 Memories for My 17-Year-Old Homie</p>`;
+            await sleepTimer(4000);
+            hud.innerHTML = '';
+
+            const deck = document.getElementById('wall-nodes-mount-deck');
+
+            for (let index = 0; index < adaptiveWallMemoryCollection.length; index++) {
+                const data = adaptiveWallMemoryCollection[index];
+
+                const polaroid = document.createElement('div');
+                polaroid.className = 'memory-polaroid-node';
+                
+                let targetX = window.innerWidth * data.xRatio;
+                let wireBaseTop = window.innerHeight * 0.05;
+                if(data.stringIndex === 2) wireBaseTop += 95;
+                if(data.stringIndex === 3) wireBaseTop += 190;
+                
+                let arcY = wireBaseTop + Math.sin((targetX / window.innerWidth) * Math.PI) * 20;
+                
+                let finalWallLeft = targetX - 57; 
+                let finalWallTop = arcY - 4;      
+
+                polaroid.style.setProperty('--wall-left', `${finalWallLeft}px`);
+                polaroid.style.setProperty('--wall-top', `${finalWallTop}px`);
+                polaroid.style.setProperty('--wall-tilt', `${data.tilt}deg`);
+
+                polaroid.innerHTML = `
+                    <div class="wooden-clothespin"></div>
+                    <div class="photo-canvas-inner"><img src="${data.img}" alt="Memory"></div>
+                `;
+
+                deck.appendChild(polaroid);
+
+                if (data.isMasterpiece) {
+                    polaroid.classList.add('enter-center', 'masterpiece-special');
+                } else {
+                    polaroid.classList.add('enter-center');
+                }
+                await sleepTimer(1000); 
+
+                hud.innerHTML = '';
+                hud.style.opacity = '1';
+                
+                for(let lineText of data.captions) {
+                    const lineNode = document.createElement('p');
+                    lineNode.className = 'caption-row-line';
+                    lineNode.innerText = lineText;
+                    hud.appendChild(lineNode);
+                    
+                    lineNode.getBoundingClientRect(); 
+                    lineNode.classList.add('active-line');
+                    await sleepTimer(data.isMasterpiece ? 2400 : 2600); 
+                }
+
+                await sleepTimer(1500); 
+                hud.style.opacity = '0';
+                await sleepTimer(500);
+
+                if (data.isMasterpiece) {
+                    polaroid.style.transition = 'all 4s cubic-bezier(0.25, 1, 0.5, 1)';
+                    polaroid.style.transform = 'translateY(-140vh) scale(0.4)';
+                    polaroid.style.opacity = '0';
+                    await sleepTimer(3000);
+                } else {
+                    polaroid.classList.remove('enter-center');
+                    polaroid.classList.add('fly-to-string');
+                    await sleepTimer(2200); 
+
+                    const pin = polaroid.querySelector('.wooden-clothespin');
+                    pin.style.opacity = '1';
+                    pin.style.transform = 'scaleY(1)';
+
+                    polaroid.classList.remove('fly-to-string');
+                    polaroid.classList.add('breeze-idle');
+                    await sleepTimer(300); 
+                }
+            }
+
+            hud.innerHTML = '';
+            await sleepTimer(7000); 
+
+            const bulbs = document.querySelectorAll('.fairy-bulb');
+            bulbs.forEach(b => b.style.opacity = '0.05'); 
+
+            document.querySelectorAll('.wooden-clothespin').forEach(clip => {
+                clip.style.opacity = '0';
+                clip.style.transform = 'scaleY(0)';
+            });
+            document.getElementById('path-wire-1').style.opacity = '0';
+            document.getElementById('path-wire-2').style.opacity = '0';
+            document.getElementById('path-wire-3').style.opacity = '0';
+
+            const mountedPolaroidNodes = document.querySelectorAll('.memory-polaroid-node');
+            mountedPolaroidNodes.forEach((card, idx) => {
+                if (!card.classList.contains('masterpiece-special')) {
+                    card.classList.remove('breeze-idle');
+                    setTimeout(() => {
+                        card.classList.add('ascend-away');
+                    }, idx * 120); 
+                }
+            });
+
+            wallFXMode = 'ASCENDING_STARS';
+            await sleepTimer(5500);
+
+            transitionStages(stageWall, proceedToFinalLetterSheet);
+        }
+
+        function calculateWireGeometry() {
+            const w = window.innerWidth;
+            document.getElementById('path-wire-1').setAttribute('d', `M 0 25 Q ${w * 0.5} 48 ${w} 25`);
+            document.getElementById('path-wire-2').setAttribute('d', `M 0 25 Q ${w * 0.5} 48 ${w} 25`);
+            document.getElementById('path-wire-3').setAttribute('d', `M 0 25 Q ${w * 0.5} 48 ${w} 25`);
+        }
+
+        function initializeWallFXParticleEngine() {
+            wallCanvas = document.getElementById('wall-fx-canvas');
+            wallCtx = wallCanvas.getContext('2d');
+            wallCanvas.width = window.innerWidth;
+            wallCanvas.height = window.innerHeight;
+
+            for(let i=0; i<60; i++) {
+                wallParticles.push({
+                    x: Math.random() * wallCanvas.width,
+                    y: Math.random() * wallCanvas.height,
+                    r: Math.random() * 1.1 + 0.3,
+                    alpha: Math.random() * 0.25 + 0.05,
+                    vX: Math.random() * 0.1 - 0.05,
+                    vY: -(Math.random() * 0.15 + 0.05),
+                    color: '216, 199, 161'
+                });
+            }
+            renderWallFXLoop();
+        }
+
+        function renderWallFXLoop() {
+            if(!wallCtx) return;
+            wallCtx.clearRect(0, 0, wallCanvas.width, wallCanvas.height);
+            wallParticles.forEach(p => {
+                if (wallFXMode === 'ASCENDING_STARS') {
+                    p.vY -= 0.015; 
+                    p.y += p.vY;
+                    p.color = '255, 255, 255';
+                    p.alpha = Math.min(p.alpha + 0.01, 0.9);
+                } else { 
+                    p.y += p.vY; p.x += p.vX;
+                    if (p.y < 0) { p.y = wallCanvas.height; p.x = Math.random() * wallCanvas.width; }
+                }
+                wallCtx.beginPath();
+                wallCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                wallCtx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+                wallCtx.fill();
+            });
+            requestAnimationFrame(renderWallFXLoop);
+        }
+
+        // Stage 6: Final Letter Sheet Setup
+        async function proceedToFinalLetterSheet() {
+            const whiteSheet = document.getElementById('stage-final-letter');
+            const letterContainer = document.getElementById('letter-lines-container');
+            whiteSheet.style.display = 'block';
+            whiteSheet.getBoundingClientRect();
+            whiteSheet.style.opacity = '1';
+
+            await sleepTimer(2000); 
+
+            for(let lineText of documentFinalLetterBank) {
+                const lineNode = document.createElement('div');
+                lineNode.className = 'sheet-letter-line';
+                lineNode.innerText = lineText;
+                
+                if(lineText.includes("Happy Birthday.") || lineText.includes("and thank you...")) {
+                    lineNode.style.fontWeight = '500';
+                    lineNode.style.color = '#000000';
+                }
+
+                letterContainer.appendChild(lineNode);
+                lineNode.getBoundingClientRect(); 
+                lineNode.classList.add('visible');
+                
+                whiteSheet.scrollTo({ top: whiteSheet.scrollHeight, behavior: 'smooth' });
+                await sleepTimer(lineText.length * 40 + 2000);
+            }
+
+            await sleepTimer(2500);
+            const signature = document.createElement('div');
+            signature.className = 'final-signature-line';
+            signature.innerHTML = `Made with more love than you'll probably ever know.<br><span style="font-size:1rem; display:inline-block; margin-top:8px;">— Joudy 🤍</span>`;
+            letterContainer.appendChild(signature);
+            
+            signature.getBoundingClientRect();
+            signature.style.opacity = '1';
+            whiteSheet.scrollTo({ top: whiteSheet.scrollHeight, behavior: 'smooth' });
+
+            await sleepTimer(3500);
+            const secretBtn = document.createElement('button');
+            secretBtn.className = 'tiny-secret-btn';
+            secretBtn.id = 'trigger-secret-popup';
+            secretBtn.innerText = 'One last thing...';
+            letterContainer.appendChild(secretBtn);
+            
+            secretBtn.getBoundingClientRect();
+            secretBtn.style.opacity = '1';
+            whiteSheet.scrollTo({ top: whiteSheet.scrollHeight, behavior: 'smooth' });
+
+            const backdrop = document.getElementById('secret-modal-backdrop');
+            const closeBtn = document.getElementById('close-modal-btn');
+
+            secretBtn.addEventListener('click', () => {
+                backdrop.classList.add('modal-open');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                backdrop.classList.remove('modal-open');
+            });
+        }
+    </script>
+</body>
+</html>
