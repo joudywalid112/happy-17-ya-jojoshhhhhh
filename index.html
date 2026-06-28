@@ -38,7 +38,7 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            transition: opacity 1.5s ease; /* Made fade transition smoother */
+            transition: opacity 1.5s ease;
         }
 
         .phone-icon-wrapper {
@@ -531,25 +531,25 @@
     <script>
         const sleepTimer = ms => new Promise(res => setTimeout(res, ms));
 
-        // 17 Structured Memories Dataset Map
+        // 17 Structured Memories Dataset Map with Portable Relative Paths (.jpeg matches exactly)
         const adaptiveWallMemoryCollection = [
-            { img: "file:///c:/Users/PC/Downloads/1.jpeg", captions: ["Probably the most eventful day in human history 😭.", "W Rabena y5alelna Fathallah, the network, your keys...", "w Ahmed Tee too of course 😘"], tilt: -5, stringIndex: 1, xRatio: 0.12 },
-            { img: "file:///c:/Users/PC/Downloads/2.jpeg", captions: ["Definitely one of the best days of our lives.", "You can literally tell from my face 😭.", "I was honestly a little sad because I loved our school memories so much...", "Bas eh ya3ny, we'll make memories everywhere we go 🥵❤️"], tilt: 4, stringIndex: 1, xRatio: 0.28 },
-            { img: "file:///c:/Users/PC/Downloads/3.jpeg", captions: ["2olely el deffrance between me w el ward hhh."], tilt: -3, stringIndex: 1, xRatio: 0.44 },
-            { img: "file:///c:/Users/PC/Downloads/4.jpeg", captions: ["I seriously can't explain how much I love this picture.", "Whenever I think about school...", "This is the photo that pops into my head first."], tilt: 5, stringIndex: 1, xRatio: 0.60 },
-            { img: "file:///c:/Users/PC/Downloads/5.jpeg", captions: ["SMASHHHHHHHHHHHHHHHHHHHH."], tilt: -4, stringIndex: 1, xRatio: 0.76 },
-            { img: "file:///c:/Users/PC/Downloads/6.jpeg", captions: ["The best nap I've ever taken in my entire life 😭.", "I slept better than I do in my own bed.", "Rabena ysam7 Mr. English...", "w y5alelna ktef el Jojosh 😘"], tilt: 6, stringIndex: 1, xRatio: 0.90 },
-            { img: "file:///c:/Users/PC/Downloads/7.jpeg", captions: ["Do you remember what song I was singing to you that day?"], tilt: -5, stringIndex: 2, xRatio: 0.15 },
-            { img: "file:///c:/Users/PC/Downloads/8.jpeg", captions: ["10/10 day.", "10/10 ice cream.", "10/10 walk.", "W atra bala7 el sham...", "w enti fahma ba2a 🥵"], tilt: 3, stringIndex: 2, xRatio: 0.32 },
-            { img: "file:///c:/Users/PC/Downloads/9.jpeg", captions: ["Hamoott w a3raf...", "What were you telling me hereee? 😭"], tilt: -6, stringIndex: 2, xRatio: 0.50 },
-            { img: "file:///c:/Users/PC/Downloads/10.jpeg", captions: ["A perfect day...", "Except for the koshary of course. 💀"], tilt: 4, stringIndex: 2, xRatio: 0.68 },
-            { img: "file:///c:/Users/PC/Downloads/11.jpeg", captions: ["Second year - first semester...", "Ya bbooooyyyy"], tilt: -3, stringIndex: 2, xRatio: 0.85 },
-            { img: "file:///c:/Users/PC/Downloads/12.jpeg", captions: ["Probably the most iconic photo in human history."], tilt: 5, stringIndex: 3, xRatio: 0.20 },
-            { img: "file:///c:/Users/PC/Downloads/13.jpeg", captions: ["This picture smells like Cinnabon...", "and \"and that i got engaged.\" hhhhh"], tilt: -4, stringIndex: 3, xRatio: 0.40 },
-            { img: "file:///c:/Users/PC/Downloads/14.jpeg", captions: ["The official First Secondary photo 😭📸"], tilt: 4, stringIndex: 3, xRatio: 0.60 },
-            { img: "file:///c:/Users/PC/Downloads/15.jpeg", captions: ["The amount of love you gave me during first year honestly can't be described...", "Bas wallahy msh 3arfa ezay madetkesh etneen a2lam 3ala wishik kedaa 😭"], tilt: -5, stringIndex: 3, xRatio: 0.80 },
-            { img: "file:///c:/Users/PC/Downloads/16.jpeg", captions: ["I barely remember anything about that day...", "Buttttt...", "We still managed to take one of the most iconic pictures everrr"], tilt: 3, stringIndex: 3, xRatio: 0.92 },
-            { img: "file:///c:/Users/PC/Downloads/17.jpeg", captions: [
+            { img: "images/1.jpeg", captions: ["Probably the most eventful day in human history 😭.", "W Rabena y5alelna Fathallah, the network, your keys...", "w Ahmed Tee too of course 😘"], tilt: -5, stringIndex: 1, xRatio: 0.12 },
+            { img: "images/2.jpeg", captions: ["Definitely one of the best days of our lives.", "You can literally tell from my face 😭.", "I was honestly a little sad because I loved our school memories so much...", "Bas eh ya3ny, we'll make memories everywhere we go 🥵❤️"], tilt: 4, stringIndex: 1, xRatio: 0.28 },
+            { img: "images/3.jpeg", captions: ["2olely el deffrance between me w el ward hhh."], tilt: -3, stringIndex: 1, xRatio: 0.44 },
+            { img: "images/4.jpeg", captions: ["I seriously can't explain how much I love this picture.", "Whenever I think about school...", "This is the photo that pops into my head first."], tilt: 5, stringIndex: 1, xRatio: 0.60 },
+            { img: "images/5.jpeg", captions: ["SMASHHHHHHHHHHHHHHHHHHHH."], tilt: -4, stringIndex: 1, xRatio: 0.76 },
+            { img: "images/6.jpeg", captions: ["The best nap I've ever taken in my entire life 😭.", "I slept better than I do in my own bed.", "Rabena ysam7 Mr. English...", "w y5alelna ktef el Jojosh 😘"], tilt: 6, stringIndex: 1, xRatio: 0.90 },
+            { img: "images/7.jpeg", captions: ["Do you remember what song I was singing to you that day?"], tilt: -5, stringIndex: 2, xRatio: 0.15 },
+            { img: "images/8.jpeg", captions: ["10/10 day.", "10/10 ice cream.", "10/10 walk.", "W atra bala7 el sham...", "w enti fahma ba2a 🥵"], tilt: 3, stringIndex: 2, xRatio: 0.32 },
+            { img: "images/9.jpeg", captions: ["Hamoott w a3raf...", "What were you telling me hereee? 😭"], tilt: -6, stringIndex: 2, xRatio: 0.50 },
+            { img: "images/10.jpeg", captions: ["A perfect day...", "Except for the koshary of course. 💀"], tilt: 4, stringIndex: 2, xRatio: 0.68 },
+            { img: "images/11.jpeg", captions: ["Second year - first semester...", "Ya bbooooyyyy"], tilt: -3, stringIndex: 2, xRatio: 0.85 },
+            { img: "images/12.jpeg", captions: ["Probably the most iconic photo in human history."], tilt: 5, stringIndex: 3, xRatio: 0.20 },
+            { img: "images/13.jpeg", captions: ["This picture smells like Cinnabon...", "and \"and that i got engaged.\" hhhhh"], tilt: -4, stringIndex: 3, xRatio: 0.40 },
+            { img: "images/14.jpeg", captions: ["The official First Secondary photo 😭📸"], tilt: 4, stringIndex: 3, xRatio: 0.60 },
+            { img: "images/15.jpeg", captions: ["The amount of love you gave me during first year honestly can't be described...", "Bas wallahy msh 3arfa ezay madetkesh etneen a2lam 3ala wishik kedaa 😭"], tilt: -5, stringIndex: 3, xRatio: 0.80 },
+            { img: "images/16.jpeg", captions: ["I barely remember anything about that day...", "Buttttt...", "We still managed to take one of the most iconic pictures everrr"], tilt: 3, stringIndex: 3, xRatio: 0.92 },
+            { img: "images/17.jpeg", captions: [
                     "JOJOOOOOOSH...", "EL KEBEERAAAA OOWWWWWWYYYYY ❤️😭", "I don't know why...", "We've only known each other for two years,",
                     "but somehow it feels like I grew up with you.", "Like I've watched every version of you become the person you are today.",
                     "And honestly...", "I've never looked at you the same way I look at everyone else.",
@@ -582,7 +582,6 @@
             const overlay = document.getElementById('orientation-overlay');
             if (isLandscape) {
                 if (overlay.style.opacity !== '0') {
-                    // Adjustment: Added a 2.5-second cinematic pause once landscape is detected so she can finish reading comfortably
                     await sleepTimer(2500); 
                     overlay.style.opacity = '0';
                     setTimeout(() => { overlay.style.display = 'none'; }, 1500);
@@ -606,7 +605,6 @@
 
         // Global Orchestrator
         async function runCinematicPipeline() {
-            // Stage 1: Opening Sequence Setup
             const stageOpening = document.getElementById('stage-opening');
             stageOpening.style.display = 'flex';
             stageOpening.getBoundingClientRect();
@@ -632,7 +630,6 @@
             nextStageCallback();
         }
 
-        // Stage 2: Introduction Deck Setup
         async function proceedToIntroDeck() {
             const stageIntro = document.getElementById('stage-intro');
             stageIntro.style.display = 'flex';
@@ -648,7 +645,6 @@
             transitionStages(stageIntro, proceedToCosmicSkies);
         }
 
-        // Stage 3: Stars Sequence Engine Setup
         let cosmicCanvas, cosmicCtx, starsArray = [], cosmicMode = 'GROWING';
         async function proceedToCosmicSkies() {
             const stageCosmic = document.getElementById('stage-cosmic');
@@ -730,7 +726,6 @@
             requestAnimationFrame(renderCosmicLoop);
         }
 
-        // Stage 4: Main Reveal Title
         async function proceedToMainReveal() {
             const stageReveal = document.getElementById('stage-reveal');
             stageReveal.style.display = 'flex';
@@ -743,7 +738,6 @@
             transitionStages(stageReveal, proceedToMemoryWallDeck);
         }
 
-        // Stage 5: Memory Hanging Wall Timeline Engine
         let wallCanvas, wallCtx, wallParticles = [], wallFXMode = 'DUST';
         async function proceedToMemoryWallDeck() {
             const stageWall = document.getElementById('stage-memory-wall');
@@ -919,7 +913,6 @@
             requestAnimationFrame(renderWallFXLoop);
         }
 
-        // Stage 6: Final Letter Sheet Setup
         async function proceedToFinalLetterSheet() {
             const whiteSheet = document.getElementById('stage-final-letter');
             const letterContainer = document.getElementById('letter-lines-container');
