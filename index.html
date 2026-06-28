@@ -220,7 +220,7 @@
             flex-direction: column;
             align-items: center;
             opacity: 0;
-            visibility: visible !important; /* DEBUG: Ensure always visible */
+            visibility: visible !important;
             width: 250px;
             padding: 12px 12px 30px 12px;
             left: calc(50% - 125px);
@@ -264,7 +264,7 @@
             height: 100% !important;
             object-fit: cover !important;
             display: block !important;
-            opacity: 1 !important; /* DEBUG: Force images to always render full opacity */
+            opacity: 1 !important;
             visibility: visible !important;
         }
 
@@ -538,7 +538,6 @@
     <script>
         const sleepTimer = ms => new Promise(res => setTimeout(res, ms));
 
-        // Dataset with explicitly lowercased relative paths to prevent case-sensitivity 404s on live servers
         const adaptiveWallMemoryCollection = [
             { img: "images/1.jpeg", captions: ["Probably the most eventful day in human history 😭.", "W Rabena y5alelna Fathallah, the network, your keys...", "w Ahmed Tee too of course 😘"], tilt: -5, stringIndex: 1, xRatio: 0.12 },
             { img: "images/2.jpeg", captions: ["Definitely one of the best days of our lives.", "You can literally tell from my face 😭.", "I was honestly a little sad because I loved our school memories so much...", "Bas eh ya3ny, we'll make memories everywhere we go 🥵❤️"], tilt: 4, stringIndex: 1, xRatio: 0.28 },
@@ -751,6 +750,18 @@
             stageWall.getBoundingClientRect();
             stageWall.style.opacity = '1';
 
+            // --- PORTABLE ISOLATED IMAGE TEST ---
+            const testImg = document.createElement("img");
+            testImg.src = "images/1.jpeg";
+            testImg.style.width = "300px";
+            testImg.style.height = "300px";
+            testImg.style.position = "fixed";
+            testImg.style.top = "100px";
+            testImg.style.left = "100px";
+            testImg.style.zIndex = "999999";
+            document.body.appendChild(testImg);
+            console.log("Global Portable Test Image Injected into DOM.");
+
             const lightsContainer = document.getElementById('lights-track-bar');
             const bulbCount = Math.floor(window.innerWidth / 40);
             for(let i=0; i<bulbCount; i++) {
@@ -769,11 +780,9 @@
 
             const deck = document.getElementById('wall-nodes-mount-deck');
 
-            // PIPELINE DEBUGGING LOGIC FOR IMAGE CREATION
             for (let index = 0; index < adaptiveWallMemoryCollection.length; index++) {
                 const data = adaptiveWallMemoryCollection[index];
 
-                // 1. Log target image path before instantiation
                 console.log("Preparing path:", data.img);
 
                 const polaroid = document.createElement('div');
@@ -793,7 +802,6 @@
                 polaroid.style.setProperty('--wall-top', `${finalWallTop}px`);
                 polaroid.style.setProperty('--wall-tilt', `${data.tilt}deg`);
 
-                // Create structural inner wrapper safely
                 const pin = document.createElement('div');
                 pin.className = 'wooden-clothespin';
                 polaroid.appendChild(pin);
@@ -801,19 +809,16 @@
                 const photoCanvasInner = document.createElement('div');
                 photoCanvasInner.className = 'photo-canvas-inner';
 
-                // 2. Instantiate <img> explicitly and apply telemetry listeners
                 const img = document.createElement('img');
                 img.src = data.img;
 
                 img.onload = () => console.log("Loaded successfully:", img.src);
                 img.onerror = () => console.error("CRITICAL: Failed to load image asset:", img.src);
 
-                // 3. Append to target DOM nodes explicitly
                 photoCanvasInner.appendChild(img);
                 polaroid.appendChild(photoCanvasInner);
                 deck.appendChild(polaroid);
 
-                // 4. Verification Check
                 console.log("Appended Node HTML Structure:", photoCanvasInner.outerHTML);
 
                 if (data.isMasterpiece) {
@@ -860,6 +865,9 @@
                 }
             }
 
+            // Remove Test image before starting final transition
+            if (testImg) testImg.remove();
+
             hud.innerHTML = '';
             await sleepTimer(7000); 
 
@@ -874,8 +882,8 @@
             document.getElementById('path-wire-2').style.opacity = '0';
             document.getElementById('path-wire-3').style.opacity = '0';
 
+            // FIXED AND REMOVED THE DUPLICATED RUNTIME ERROR LINE RIGHT HERE
             const mountedPolaroidNodes = document.querySelectorAll('.memory-polaroid-node');
-            mountedMountedPolaroidNodes = document.querySelectorAll('.memory-polaroid-node');
             mountedPolaroidNodes.forEach((card, idx) => {
                 if (!card.classList.contains('masterpiece-special')) {
                     card.classList.remove('breeze-idle');
